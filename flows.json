@@ -1,0 +1,429 @@
+[
+    {
+        "id": "12e51e67d7b37ae4",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5141e8ce6df3ea8b",
+        "type": "pushover",
+        "z": "12e51e67d7b37ae4",
+        "name": "msnCelular",
+        "device": "celPapa",
+        "title": "Alarma Casa",
+        "priority": "1",
+        "sound": "bike",
+        "url": "www.ecuaiot.com",
+        "url_title": "www.ecuaiot.com",
+        "html": false,
+        "x": 1150,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "59cc619d39d15287",
+        "type": "azureiothub",
+        "z": "12e51e67d7b37ae4",
+        "name": "Azure IoT Hub",
+        "protocol": "mqtt",
+        "x": 1160,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "134ec613514055e6",
+        "type": "inject",
+        "z": "12e51e67d7b37ae4",
+        "name": "Temperatura",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "max",
+                "v": "100",
+                "vt": "str"
+            },
+            {
+                "p": "sensorId",
+                "v": "temp1",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 80,
+        "wires": [
+            [
+                "3a2a5d4c3f1a7b71"
+            ]
+        ]
+    },
+    {
+        "id": "3a2a5d4c3f1a7b71",
+        "type": "function",
+        "z": "12e51e67d7b37ae4",
+        "name": "FuncionRandomica",
+        "func": "const randomValue={};\nrandomValue.sensorId=msg.sensorId;\nvar randomico = Math.random()*msg.max;\nrandomValue.val = randomico;\nrandomValue.timestamp=msg.payload;\nreturn randomValue;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 100,
+        "wires": [
+            [
+                "0520ea951f9d57cf"
+            ]
+        ]
+    },
+    {
+        "id": "c5357bbe117f2132",
+        "type": "function",
+        "z": "12e51e67d7b37ae4",
+        "name": "FuncionNormalizacion",
+        "func": "const Valor={};\nValor.sensorId=msg.sensorId;\nValor.payload = msg.topic;\nValor.timestamp=msg.timestamp;\nValor.topic = msg.payload;\nvar prioridad;\nif (msg.topic)\n    return Valor;\nelse\n    return null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 260,
+        "wires": [
+            [
+                "ebd88d8f3b67ad57",
+                "5141e8ce6df3ea8b"
+            ]
+        ]
+    },
+    {
+        "id": "ebd88d8f3b67ad57",
+        "type": "ui_led",
+        "z": "12e51e67d7b37ae4",
+        "order": 1,
+        "group": "ea532608c5587a22",
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "1",
+                "valueType": "num"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 1130,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "5b0b7b2ccf516289",
+        "type": "function",
+        "z": "12e51e67d7b37ae4",
+        "name": "azureMessage",
+        "func": "const dataMessage = {\n    sensorId: msg.sensorId,\n    val: msg.val,\n    timestamp: msg.timestamp\n};\nconst azureMessage = {\n    \"deviceId\": \"Dep401\",\n    \"key\":\"k6avb+raM29ggp/lmq1ZNHiCUgtUI09TDH2zgjlb7AY=\",\n    \"protocol\":\"mqtt\",\n    \"data\": dataMessage\n};\nconst message2send = {};\nmessage2send.payload = azureMessage;\nreturn message2send",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 120,
+        "wires": [
+            [
+                "59cc619d39d15287"
+            ]
+        ]
+    },
+    {
+        "id": "6181adad44808ec6",
+        "type": "inject",
+        "z": "12e51e67d7b37ae4",
+        "name": "Presion",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "max",
+                "v": "150",
+                "vt": "str"
+            },
+            {
+                "p": "sensorId",
+                "v": "press1",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 140,
+        "wires": [
+            [
+                "3a2a5d4c3f1a7b71"
+            ]
+        ]
+    },
+    {
+        "id": "3da06b6a55a3783c",
+        "type": "azureiothubreceiver",
+        "z": "12e51e67d7b37ae4",
+        "name": "Azure IoT Hub Receiver",
+        "x": 210,
+        "y": 480,
+        "wires": [
+            [
+                "0cafd208b1fde1e7"
+            ]
+        ]
+    },
+    {
+        "id": "c5fbba61c782f447",
+        "type": "debug",
+        "z": "12e51e67d7b37ae4",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "0cafd208b1fde1e7",
+        "type": "function",
+        "z": "12e51e67d7b37ae4",
+        "name": "Funcion",
+        "func": "const randoformatedMenssage = {};\nrandoformatedMenssage.sensorId = msg.payload.sensorId;\nrandoformatedMenssage.payload = msg.payload.val;\nreturn randoformatedMenssage;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 480,
+        "wires": [
+            [
+                "7a5b0b8527f5eac3",
+                "c5fbba61c782f447"
+            ]
+        ]
+    },
+    {
+        "id": "7a5b0b8527f5eac3",
+        "type": "switch",
+        "z": "12e51e67d7b37ae4",
+        "name": "",
+        "property": "sensorId",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "temp1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "press1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "temp2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": true,
+        "outputs": 3,
+        "x": 590,
+        "y": 480,
+        "wires": [
+            [
+                "39aea40eebbfca59"
+            ],
+            [
+                "83549b11ca59c49c"
+            ],
+            [
+                "ce9abdd2f0ca53d2"
+            ]
+        ]
+    },
+    {
+        "id": "39aea40eebbfca59",
+        "type": "ui_gauge",
+        "z": "12e51e67d7b37ae4",
+        "name": "",
+        "group": "741041d1fa6bec36",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "units",
+        "format": "{{value| number: 2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 790,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "83549b11ca59c49c",
+        "type": "ui_gauge",
+        "z": "12e51e67d7b37ae4",
+        "name": "",
+        "group": "741041d1fa6bec36",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Presion",
+        "label": "units",
+        "format": "{{value| number: 2}}",
+        "min": 0,
+        "max": "150",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 780,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "d4224e5a3d3a3a90",
+        "type": "mqtt in",
+        "z": "12e51e67d7b37ae4",
+        "name": "EMQX",
+        "topic": "mqtt_brocker/test",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "3f8e88ab7c6a80ad",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 190,
+        "y": 240,
+        "wires": [
+            [
+                "cb4b39b268254901"
+            ]
+        ]
+    },
+    {
+        "id": "cb4b39b268254901",
+        "type": "function",
+        "z": "12e51e67d7b37ae4",
+        "name": "Cambio",
+        "func": "const formatedMessage = {};\nformatedMessage.sensorId = msg.payload.sensorId;\nformatedMessage.val = msg.payload.val;\nformatedMessage.timestamp = msg.payload.timestamp;\nreturn formatedMessage;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 240,
+        "wires": [
+            [
+                "0520ea951f9d57cf"
+            ]
+        ]
+    },
+    {
+        "id": "0520ea951f9d57cf",
+        "type": "function",
+        "z": "12e51e67d7b37ae4",
+        "name": "CondicionAlarma",
+        "func": "const formatedMessage = {};\nformatedMessage.sensorId = msg.sensorId;\nformatedMessage.val = msg.val;\nformatedMessage.timestamp = msg.timestamp;\nvar topicoSi;\nif (msg.val > 50) topicoSi = 1;\nelse topicoSi = 0;\nformatedMessage.topic = topicoSi;\nreturn formatedMessage;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 180,
+        "wires": [
+            [
+                "5b0b7b2ccf516289",
+                "c5357bbe117f2132"
+            ]
+        ]
+    },
+    {
+        "id": "ce9abdd2f0ca53d2",
+        "type": "ui_gauge",
+        "z": "12e51e67d7b37ae4",
+        "name": "",
+        "group": "ea532608c5587a22",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "BROKER EMQX",
+        "label": "units",
+        "format": "{{value| number: 2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "className": "",
+        "x": 800,
+        "y": 540,
+        "wires": []
+    }
+]
