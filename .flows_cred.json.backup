@@ -1,0 +1,5 @@
+{
+    "3da06b6a55a3783c": {
+        "connectionString": "HostName=miot-master.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=8E8s0A/oFo5i2dM9vPJiYipYIxxb92Zpx+8RE1uU1Rs="
+    }
+}
